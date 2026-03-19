@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, user-scalable=no, viewport-fit=cover" />
   <meta name="theme-color" content="#f5f5f5" />
   <meta name="mobile-web-app-capable" content="yes" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
@@ -34,6 +34,552 @@
       --accent2: #5b4de8;
       --text: #111111;
       --text-dim: #666666;
+      --green: #16a34a;
+      --red: #dc2626;
+      --border: #d1d1d1;
+      --radius: 16px;
+      --shadow: 0 2px 12px rgba(0,0,0,0.08);
+    }
+
+    html, body {
+      height: 100%;
+      background: var(--bg);
+      color: var(--text);
+      font-family: 'DM Sans', sans-serif;
+      font-size: 20px;
+      -webkit-tap-highlight-color: transparent;
+      overscroll-behavior: none;
+    }
+
+    body {
+      display: flex;
+      flex-direction: column;
+      max-width: 480px;
+      margin: 0 auto;
+      min-height: 100dvh;
+      position: relative;
+    }
+
+    /* Background glow removed for light theme */
+    body::before { display: none; }
+
+    header {
+      padding: 52px 24px 20px;
+      position: relative;
+      z-index: 1;
+    }
+
+    .header-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-end;
+    }
+
+    h1 {
+      font-size: 32px;
+      font-weight: 600;
+      letter-spacing: -0.5px;
+      color: #111111;
+    }
+
+    .count-badge {
+      font-family: 'DM Mono', monospace;
+      font-size: 12px;
+      color: var(--text-dim);
+      background: var(--surface2);
+      border: 1px solid var(--border);
+      padding: 4px 10px;
+      border-radius: 20px;
+    }
+
+    .subtitle {
+      margin-top: 4px;
+      font-size: 16px;
+      color: var(--text-dim);
+      font-weight: 300;
+    }
+
+    /* Categories */
+    .categories {
+      display: flex;
+      gap: 8px;
+      padding: 0 24px 16px;
+      overflow-x: auto;
+      scrollbar-width: none;
+      position: relative;
+      z-index: 1;
+    }
+    .categories::-webkit-scrollbar { display: none; }
+
+    .cat-btn {
+      flex-shrink: 0;
+      padding: 6px 14px;
+      border-radius: 20px;
+      border: 1px solid var(--border);
+      background: transparent;
+      color: var(--text-dim);
+      font-family: 'DM Sans', sans-serif;
+      font-size: 16px;
+      font-weight: 500;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+    .cat-btn.active {
+      background: var(--accent);
+      border-color: var(--accent);
+      color: #fff;
+    }
+
+    /* Input area */
+    .input-wrap {
+      padding: 0 16px 10px;
+      position: relative;
+      z-index: 1;
+    }
+
+    .input-row {
+      display: flex;
+      gap: 10px;
+      background: var(--surface);
+      border: 1.5px solid var(--border);
+      border-radius: var(--radius);
+      padding: 8px 8px 8px 16px;
+      align-items: center;
+      transition: border-color 0.2s;
+    }
+    .input-row:focus-within {
+      border-color: var(--accent);
+    }
+
+    #item-input {
+      flex: 1;
+      background: transparent;
+      border: none;
+      outline: none;
+      color: var(--text);
+      font-family: 'DM Sans', sans-serif;
+      font-size: 23px;
+    }
+    #item-input::placeholder { color: var(--text-dim); }
+
+    .qty-input {
+      width: 48px;
+      background: var(--surface2);
+      border: none;
+      outline: none;
+      color: var(--accent2);
+      font-family: 'DM Mono', monospace;
+      font-size: 13px;
+      border-radius: 8px;
+      padding: 4px 6px;
+      text-align: center;
+    }
+
+    .add-btn {
+      width: 38px; height: 38px;
+      background: var(--accent);
+      border: none;
+      border-radius: 12px;
+      color: #fff;
+      font-size: 22px;
+      cursor: pointer;
+      display: flex; align-items: center; justify-content: center;
+      flex-shrink: 0;
+      transition: transform 0.15s, background 0.15s;
+      line-height: 1;
+    }
+    .add-btn:active { transform: scale(0.92); background: #6355d4; }
+
+    /* List */
+    .list-wrap {
+      flex: 1;
+      overflow-y: auto;
+      padding: 0 16px 100px;
+      position: relative;
+      z-index: 1;
+    }
+
+    .section-label {
+      font-size: 11px;
+      font-weight: 600;
+      letter-spacing: 1.2px;
+      text-transform: uppercase;
+      color: var(--text-dim);
+      padding: 10px 4px 6px;
+    }
+
+    .item-card {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 7px 14px;
+      margin-bottom: 2px;
+      box-shadow: 0 1px 4px rgba(0,0,0,0.08);
+      transition: opacity 0.2s, transform 0.2s;
+      position: relative;
+      overflow: hidden;
+    }
+
+    @keyframes slideIn {
+      from { opacity: 0; transform: translateY(10px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+
+    .item-card.checked {
+      opacity: 0.5;
+    }
+
+    .check-btn {
+      width: 24px; height: 24px;
+      flex-shrink: 0;
+      border-radius: 50%;
+      border: 2px solid var(--border);
+      background: transparent;
+      cursor: pointer;
+      display: flex; align-items: center; justify-content: center;
+      transition: all 0.2s;
+    }
+    .check-btn.done {
+      background: var(--green);
+      border-color: var(--green);
+    }
+    .check-btn.done::after {
+      content: '✓';
+      color: #ffffff;
+      font-size: 13px;
+      font-weight: 700;
+    }
+
+    .item-text {
+      flex: 1;
+      font-size: 23px;
+      font-weight: 400;
+      transition: text-decoration 0.2s;
+    }
+    .item-card.checked .item-text {
+      text-decoration: line-through;
+      color: var(--text-dim);
+    }
+
+    .item-qty {
+      font-family: 'DM Mono', monospace;
+      font-size: 12px;
+      color: var(--accent2);
+      background: rgba(192,132,252,0.12);
+      padding: 2px 8px;
+      border-radius: 8px;
+    }
+
+    .item-cat-dot {
+      width: 8px; height: 8px;
+      border-radius: 50%;
+      flex-shrink: 0;
+    }
+
+    .del-btn {
+      width: 28px; height: 28px;
+      background: rgba(248,113,113,0.12);
+      border: none;
+      border-radius: 8px;
+      color: var(--red);
+      font-size: 16px;
+      cursor: pointer;
+      display: flex; align-items: center; justify-content: center;
+      transition: background 0.15s, transform 0.15s;
+    }
+    .del-btn:active { transform: scale(0.9); background: rgba(248,113,113,0.25); }
+
+    /* Empty state */
+    .empty {
+      text-align: center;
+      padding: 60px 20px;
+      color: var(--text-dim);
+    }
+    .empty .icon { font-size: 48px; margin-bottom: 12px; }
+    .empty p { font-size: 15px; }
+
+    /* Footer bar */
+    .footer-bar {
+      position: fixed;
+      bottom: 0; left: 50%;
+      transform: translateX(-50%);
+      width: 100%;
+      max-width: 480px;
+      background: linear-gradient(to top, var(--bg) 60%, transparent);
+      padding: 16px 24px 28px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      z-index: 10;
+    }
+
+    .progress-wrap {
+      flex: 1;
+      margin-right: 16px;
+    }
+    .progress-label {
+      font-size: 12px;
+      color: var(--text-dim);
+      margin-bottom: 5px;
+      font-family: 'DM Mono', monospace;
+    }
+    .progress-bar {
+      height: 4px;
+      background: var(--surface2);
+      border-radius: 4px;
+      overflow: hidden;
+    }
+    .progress-fill {
+      height: 100%;
+      background: linear-gradient(90deg, var(--accent), var(--accent2));
+      border-radius: 4px;
+      transition: width 0.4s ease;
+    }
+
+    .clear-btn {
+      background: var(--surface2);
+      border: 1px solid var(--border);
+      color: var(--text-dim);
+      font-family: 'DM Sans', sans-serif;
+      font-size: 13px;
+      padding: 8px 14px;
+      border-radius: 12px;
+      cursor: pointer;
+      white-space: nowrap;
+      transition: all 0.2s;
+    }
+    .clear-btn:active { background: var(--surface); color: var(--red); border-color: var(--red); }
+
+    .io-btns {
+      display: flex;
+      gap: 6px;
+      padding: 0 16px 8px;
+      position: relative;
+      z-index: 1;
+    }
+    .io-btn {
+      flex: 1;
+      padding: 9px 0;
+      border-radius: 12px;
+      border: 1px solid var(--border);
+      background: var(--surface);
+      color: var(--text);
+      font-family: 'DM Sans', sans-serif;
+      font-size: 15px;
+      font-weight: 500;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+    .io-btn:active { background: var(--surface2); }
+    .io-btn.import { color: var(--accent); border-color: var(--accent); }
+
+    /* Cat colors */
+    .c-all   { background: #7c6af7; }
+    .c-fruit { background: #f97316; }
+    .c-dairy { background: #60a5fa; }
+    .c-meat  { background: #f87171; }
+    .c-bakery { background: #fbbf24; }
+    .c-other { background: #a3a3a3; }
+  </style>
+</head>
+<body>
+
+<header>
+  <div class="header-row">
+    <div>
+      <h1>🛒 Shopping List</h1>
+      <p class="subtitle">Tap item to check off</p>
+    </div>
+    <span class="count-badge" id="count-badge">0 items</span>
+  </div>
+</header>
+
+<div class="categories" id="categories">
+  <button class="cat-btn active" data-cat="All">All</button>
+  <button class="cat-btn" data-cat="Grocery">🛒 Grocery</button>
+  <button class="cat-btn" data-cat="Pharmacy">💊 Pharmacy</button>
+  <button class="cat-btn" data-cat="Other">📦 Other</button>
+</div>
+
+<div class="input-wrap">
+  <div class="input-row">
+    <input id="item-input" type="text" placeholder="Add an item..." autocomplete="off" />
+    <input id="qty-input" class="qty-input" type="text" value="1" maxlength="5" />
+    <button class="add-btn" id="add-btn">+</button>
+  </div>
+</div>
+
+<div class="io-btns">
+  <button class="io-btn" id="export-btn">⬇️ Export List</button>
+  <button class="io-btn import" id="import-btn">⬆️ Import List</button>
+  <input type="file" id="import-file" accept=".json" style="display:none" />
+</div>
+
+<div class="list-wrap" id="list-wrap"></div>
+
+<div class="footer-bar">
+  <div class="progress-wrap">
+    <div class="progress-label" id="progress-label">0 / 0 done</div>
+    <div class="progress-bar"><div class="progress-fill" id="progress-fill" style="width:0%"></div></div>
+  </div>
+  <button class="clear-btn" id="clear-btn">Clear Done</button>
+</div>
+
+<script>
+  const CAT_COLORS = { Grocery:'#4ade80', Pharmacy:'#60a5fa', Other:'#a3a3a3' };
+  let items = JSON.parse(localStorage.getItem('sl-items') || '[]');
+  let activeCat = 'All';
+
+  const listWrap = document.getElementById('list-wrap');
+  const itemInput = document.getElementById('item-input');
+  const qtyInput = document.getElementById('qty-input');
+  const addBtn = document.getElementById('add-btn');
+  const clearBtn = document.getElementById('clear-btn');
+  const countBadge = document.getElementById('count-badge');
+  const progressLabel = document.getElementById('progress-label');
+  const progressFill = document.getElementById('progress-fill');
+
+  function save() { localStorage.setItem('sl-items', JSON.stringify(items)); }
+
+  function getCategory() {
+    const c = activeCat;
+    return (c === 'All') ? 'Grocery' : c;
+  }
+
+  function addItem() {
+    const name = itemInput.value.trim();
+    if (!name) { itemInput.focus(); return; }
+    const qty = qtyInput.value.trim() || '1';
+    items.unshift({ id: Date.now(), name, qty, cat: getCategory(), done: false });
+    save(); render();
+    itemInput.value = '';
+    qtyInput.value = '1';
+    itemInput.focus();
+  }
+
+  function toggleItem(id) {
+    const i = items.find(x => x.id === id);
+    if (i) { i.done = !i.done; save(); render(); }
+  }
+
+  function deleteItem(id) {
+    items = items.filter(x => x.id !== id);
+    save(); render();
+  }
+
+  function clearDone() {
+    items = items.filter(x => !x.done);
+    save(); render();
+  }
+
+  function render() {
+    const filtered = activeCat === 'All' ? items : items.filter(x => x.cat === activeCat);
+    const total = filtered.length;
+    const done = filtered.filter(x => x.done).length;
+
+    countBadge.textContent = `${total} item${total !== 1 ? 's' : ''}`;
+    progressLabel.textContent = `${done} / ${total} done`;
+    progressFill.style.width = total ? `${(done/total)*100}%` : '0%';
+
+    if (total === 0) {
+      listWrap.innerHTML = `<div class="empty"><div class="icon">🛍️</div><p>Your list is empty.<br>Add something above!</p></div>`;
+      return;
+    }
+
+    const pending = filtered.filter(x => !x.done);
+    const checked = filtered.filter(x => x.done);
+
+    let html = '';
+    if (pending.length) {
+      html += pending.map(item => cardHTML(item)).join('');
+    }
+    if (checked.length) {
+      html += `<div class="section-label">Checked Off</div>`;
+      html += checked.map(item => cardHTML(item)).join('');
+    }
+    listWrap.innerHTML = html;
+
+    listWrap.querySelectorAll('.check-btn').forEach(btn => {
+      btn.addEventListener('click', () => toggleItem(+btn.dataset.id));
+    });
+    listWrap.querySelectorAll('.del-btn').forEach(btn => {
+      btn.addEventListener('click', () => deleteItem(+btn.dataset.id));
+    });
+  }
+
+  function cardHTML(item) {
+    const color = CAT_COLORS[item.cat] || '#a3a3a3';
+    return `
+    <div class="item-card ${item.done ? 'checked' : ''}">
+      <div class="item-cat-dot" style="background:${color}"></div>
+      <button class="check-btn ${item.done ? 'done' : ''}" data-id="${item.id}"></button>
+      <span class="item-text">${escHtml(item.name)}</span>
+      ${item.qty && item.qty !== '1' ? `<span class="item-qty">${escHtml(item.qty)}</span>` : ''}
+      <button class="del-btn" data-id="${item.id}">×</button>
+    </div>`;
+  }
+
+  function escHtml(s) {
+    return s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+  }
+
+  addBtn.addEventListener('click', addItem);
+  itemInput.addEventListener('keydown', e => { if (e.key === 'Enter') addItem(); });
+  clearBtn.addEventListener('click', clearDone);
+
+  // Export
+  document.getElementById('export-btn').addEventListener('click', () => {
+    const data = JSON.stringify(items, null, 2);
+    const blob = new Blob([data], { type: 'application/json' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    const date = new Date().toISOString().slice(0,10);
+    a.href = url;
+    a.download = `shopping-list-${date}.json`;
+    a.click();
+    URL.revokeObjectURL(url);
+  });
+
+  // Import
+  document.getElementById('import-btn').addEventListener('click', () => {
+    document.getElementById('import-file').click();
+  });
+  document.getElementById('import-file').addEventListener('change', e => {
+    const file = e.target.files[0];
+    if (!file) return;
+    const reader = new FileReader();
+    reader.onload = ev => {
+      try {
+        const imported = JSON.parse(ev.target.result);
+        if (!Array.isArray(imported)) throw new Error();
+        if (confirm(`Import ${imported.length} items? This will replace your current list.`)) {
+          items = imported;
+          save(); render();
+        }
+      } catch {
+        alert('Invalid file. Please use a previously exported Shopping List file.');
+      }
+      e.target.value = '';
+    };
+    reader.readAsText(file);
+  });
+
+  document.getElementById('categories').addEventListener('click', e => {
+    const btn = e.target.closest('.cat-btn');
+    if (!btn) return;
+    document.querySelectorAll('.cat-btn').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+    activeCat = btn.dataset.cat;
+    render();
+  });
+
+  render();
+</script>
+</body>
+</html>
       --green: #16a34a;
       --red: #dc2626;
       --border: #d1d1d1;
