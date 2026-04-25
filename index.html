@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -399,9 +400,11 @@
 
 <div class="categories" id="categories">
   <button class="cat-btn active" data-cat="All">All</button>
-  <button class="cat-btn" data-cat="Grocery">🛒 Grocery</button>
-  <button class="cat-btn" data-cat="Pharmacy">💊 Pharmacy</button>
-  <button class="cat-btn" data-cat="Other">📦 Other</button>
+  <button class="cat-btn" data-cat="Acme">Acme</button>
+  <button class="cat-btn" data-cat="Giant">Giant</button>
+  <button class="cat-btn" data-cat="Aldi">Aldi</button>
+  <button class="cat-btn" data-cat="McCaffrey's">McCaffrey's</button>
+  <button class="cat-btn" data-cat="Other">Other</button>
 </div>
 
 <div class="input-wrap">
@@ -429,7 +432,7 @@
 </div>
 
 <script>
-  const CAT_COLORS = { Grocery:'#4ade80', Pharmacy:'#60a5fa', Other:'#a3a3a3' };
+  const CAT_COLORS = { Acme:'#f97316', Giant:'#16a34a', Aldi:'#3b82f6', "McCaffrey's":'#a855f7', Other:'#a3a3a3' };
   let items = JSON.parse(localStorage.getItem('sl-items') || '[]');
   let activeCat = 'All';
 
@@ -446,7 +449,7 @@
 
   function getCategory() {
     const c = activeCat;
-    return (c === 'All') ? 'Grocery' : c;
+    return (c === 'All') ? 'Acme' : c;
   }
 
   function addItem() {
