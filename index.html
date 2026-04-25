@@ -586,6 +586,12 @@
   });
 
   render();
+  // Request fullscreen on first tap
+  document.addEventListener('click', function tryFullscreen() {
+    const el = document.documentElement;
+    if (el.requestFullscreen) el.requestFullscreen();
+    else if (el.webkitRequestFullscreen) el.webkitRequestFullscreen();
+  }, { once: true });
 </script>
 </body>
 </html>
