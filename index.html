@@ -419,7 +419,6 @@
   <div class="input-row">
     <input id="item-input" type="text" placeholder="Add an item..." autocomplete="off" />
     <input id="qty-input" class="qty-input" type="text" value="1" maxlength="5" />
-    <button class="add-btn" id="add-btn">+</button>
   </div>
 </div>
 
@@ -441,7 +440,6 @@
   const listWrap = document.getElementById('list-wrap');
   const itemInput = document.getElementById('item-input');
   const qtyInput = document.getElementById('qty-input');
-  const addBtn = document.getElementById('add-btn');
   const clearBtn = document.getElementById('clear-btn');
   const countBadge = document.getElementById('count-badge');
   const progressLabel = document.getElementById('progress-label');
@@ -531,8 +529,8 @@
     return s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
   }
 
-  addBtn.addEventListener('click', addItem);
   itemInput.addEventListener('keydown', e => { if (e.key === 'Enter') addItem(); });
+  qtyInput.addEventListener('keydown', e => { if (e.key === 'Enter') addItem(); });
   clearBtn.addEventListener('click', clearDone);
 
   document.getElementById('categories').addEventListener('click', e => {
