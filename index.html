@@ -142,6 +142,8 @@
       padding: 0 16px 10px;
       position: relative;
       z-index: 1;
+      box-sizing: border-box;
+      width: 100%;
     }
 
     .input-row {
@@ -421,12 +423,6 @@
   </div>
 </div>
 
-<div class="io-btns">
-  <button class="io-btn" id="export-btn">⬇️ Export List</button>
-  <button class="io-btn import" id="import-btn">⬆️ Import List</button>
-  <input type="file" id="import-file" accept=".json" style="display:none" />
-</div>
-
 <div class="list-wrap" id="list-wrap"></div>
 
 <div class="footer-bar">
@@ -538,43 +534,6 @@
   addBtn.addEventListener('click', addItem);
   itemInput.addEventListener('keydown', e => { if (e.key === 'Enter') addItem(); });
   clearBtn.addEventListener('click', clearDone);
-
-  // Export
-  document.getElementById('export-btn').addEventListener('click', () => {
-    const data = JSON.stringify(items, null, 2);
-    const blob = new Blob([data], { type: 'application/json' });
-    const url = URL.createObjectURL(blob);
-    const a = document.createElement('a');
-    const date = new Date().toISOString().slice(0,10);
-    a.href = url;
-    a.download = `shopping-list-${date}.json`;
-    a.click();
-    URL.revokeObjectURL(url);
-  });
-
-  // Import
-  document.getElementById('import-btn').addEventListener('click', () => {
-    document.getElementById('import-file').click();
-  });
-  document.getElementById('import-file').addEventListener('change', e => {
-    const file = e.target.files[0];
-    if (!file) return;
-    const reader = new FileReader();
-    reader.onload = ev => {
-      try {
-        const imported = JSON.parse(ev.target.result);
-        if (!Array.isArray(imported)) throw new Error();
-        if (confirm(`Import ${imported.length} items? This will replace your current list.`)) {
-          items = imported;
-          save(); render();
-        }
-      } catch {
-        alert('Invalid file. Please use a previously exported Shopping List file.');
-      }
-      e.target.value = '';
-    };
-    reader.readAsText(file);
-  });
 
   document.getElementById('categories').addEventListener('click', e => {
     const btn = e.target.closest('.cat-btn');
