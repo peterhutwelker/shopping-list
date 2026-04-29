@@ -172,13 +172,13 @@
     #item-input::placeholder { color: var(--text-dim); }
 
     .qty-input {
-      width: 48px;
+      width: 56px;
       background: var(--surface2);
       border: none;
       outline: none;
       color: var(--accent2);
       font-family: 'DM Mono', monospace;
-      font-size: 13px;
+      font-size: 16px;
       border-radius: 8px;
       padding: 4px 6px;
       text-align: center;
@@ -460,7 +460,8 @@
     save(); render();
     itemInput.value = '';
     qtyInput.value = '1';
-    itemInput.focus();
+    itemInput.blur();
+    qtyInput.blur();
   }
 
   function toggleItem(id) {
