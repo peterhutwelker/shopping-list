@@ -120,22 +120,29 @@
 
     .cat-btn {
       flex-shrink: 0;
-      padding: 10px 20px;
+      padding: 12px 22px;
       border-radius: 20px;
-      border: 1px solid var(--border);
+      border: 2px solid var(--border);
       background: transparent;
       color: var(--text-dim);
       font-family: 'DM Sans', sans-serif;
-      font-size: 20px;
+      font-size: 22px;
       font-weight: 500;
       cursor: pointer;
       transition: all 0.2s;
     }
-    .cat-btn.active {
-      background: var(--accent);
-      border-color: var(--accent);
-      color: #fff;
-    }
+    .cat-btn[data-cat="Acme"]        { border-color: #f97316; color: #f97316; }
+    .cat-btn[data-cat="Giant"]       { border-color: #16a34a; color: #16a34a; }
+    .cat-btn[data-cat="Target"]      { border-color: #dc2626; color: #dc2626; }
+    .cat-btn[data-cat="McCaffrey's"] { border-color: #a855f7; color: #a855f7; }
+    .cat-btn[data-cat="Other"]       { border-color: #a3a3a3; color: #a3a3a3; }
+    .cat-btn.active { color: #fff; border-color: transparent; }
+    .cat-btn.active[data-cat="All"]         { background: var(--accent); }
+    .cat-btn.active[data-cat="Acme"]        { background: #f97316; }
+    .cat-btn.active[data-cat="Giant"]       { background: #16a34a; }
+    .cat-btn.active[data-cat="Target"]      { background: #dc2626; }
+    .cat-btn.active[data-cat="McCaffrey's"] { background: #a855f7; }
+    .cat-btn.active[data-cat="Other"]       { background: #a3a3a3; }
 
     /* Input area */
     .input-wrap {
@@ -410,7 +417,7 @@
   <button class="cat-btn active" data-cat="All">All</button>
   <button class="cat-btn" data-cat="Acme">Acme</button>
   <button class="cat-btn" data-cat="Giant">Giant</button>
-  <button class="cat-btn" data-cat="Aldi">Aldi</button>
+  <button class="cat-btn" data-cat="Target">Target</button>
   <button class="cat-btn" data-cat="McCaffrey's">McCaffrey's</button>
   <button class="cat-btn" data-cat="Other">Other</button>
 </div>
@@ -432,7 +439,7 @@
 </div>
 
 <script>
-  const CAT_COLORS = { Acme:'#f97316', Giant:'#16a34a', Aldi:'#3b82f6', "McCaffrey's":'#a855f7', Other:'#a3a3a3' };
+  const CAT_COLORS = { Acme:'#f97316', Giant:'#16a34a', Target:'#dc2626', "McCaffrey's":'#a855f7', Other:'#a3a3a3' };
   let items = JSON.parse(localStorage.getItem('sl-items') || '[]');
   let activeCat = 'All';
 
