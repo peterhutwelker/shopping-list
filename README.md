@@ -1,2 +1,2 @@
-# shopping-list
+# simple shopping-list
 Personal shopping List
